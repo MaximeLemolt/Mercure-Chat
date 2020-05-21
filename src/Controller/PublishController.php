@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PublishController extends AbstractController
 {
     /**
-     * @Route("/message", name="sendMessage", methods={"POST"})
+     * @Route("/hub/message", name="sendMessage", methods={"POST"})
      */
     public function __invoke(MessageBusInterface $bus, Request $request): RedirectResponse
     {
