@@ -28,3 +28,7 @@ services:
     App\Mercure\JwtProvider:
         arguments:
             $secret: '%env(MERCURE_JWT_KEY)%'
+            
+    App\Mercure\CookieGenerator:
+        arguments:
+            $secret: '%env(MERCURE_JWT_KEY)%'
