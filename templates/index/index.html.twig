@@ -1,20 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello IndexController!{% endblock %}
-
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Mercure - Chat</h1>
+    <div id="mercure-content-receiver"></div>
+    <form id="mercure-message-form" action="{{ path('sendMessage') }}" method="post">
+        <label for="mercure-message-input">Message:</label>
+        <input type="text" id="mercure-message-input" name="message" />
+        <input type="submit" id="mercure-message-btn" value="Send" />
+    </form>
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% block javascripts %}
+<script type="text/javascript">
+    const _receiver = document.getElementById('mercure-content-receiver');
+    const _messageInput = document.getElementById('mercure-message-input');
+    const _sendForm = document.getElementById('mercure-message-form');
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/html/Tutorial/Mercure-Chat/src/Controller/IndexController.php'|file_link(0) }}">src/Controller/IndexController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/html/Tutorial/Mercure-Chat/templates/index/index.html.twig'|file_link(0) }}">templates/index/index.html.twig</a></code></li>
-    </ul>
-</div>
+    const sendMessage = (message) => {
+        if (message === '') {
+            return;
+        }
+
+        fetch(_sendForm.action, {
+            method: _sendForm.method,
+            body: 'message=' + message,
+            headers: new Headers({
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            })
+        }).then(() => {
+            _messageInput.value = '';
+        });
+    };
+
+    _sendForm.onsubmit = (evt) => {
+        sendMessage(_messageInput.value);
+
+        evt.preventDefault();
+        return false;
+    };
+
+    const url = new URL('{{ mercure_publish_url }}');
+    url.searchParams.append('topic', 'http://localhost:8000/message');
+    const eventSource = new EventSource(url, { withCredentials: true });
+    eventSource.onmessage = (evt) => {
+        const data = JSON.parse(evt.data);
+        if (!data.message) {
+            return;
+        }
+        _receiver.insertAdjacentHTML('beforeend', `<div class="message">${data.message}</div>`);
+    };
+</script>
 {% endblock %}
