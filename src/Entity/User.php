@@ -26,15 +26,15 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
-
-    /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Role::class)
+     */
+    private $userRoles;
 
     /**
      * @ORM\OneToMany(targetEntity=Message::class, mappedBy="author")
@@ -46,10 +46,23 @@ class User implements UserInterface
      */
     private $receivedMessages;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
     public function __construct()
     {
-        $this->sendedMessages = new ArrayCollection();
-        $this->receivedMessages = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->status = 1;
+        $this->sendedMessage = new ArrayCollection();
+        $this->receivedMessage = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,22 +93,23 @@ class User implements UserInterface
     }
 
     /**
+     * Attention, la méthode getRoles() est spécifique.
+     * Elle est utilisée lorque mon utilisateur se connecte,
+     * pour que Symfony sache quels rôles sont associés à mon user en cours de connexion pour déclencher les ACL
+     * 
      * @see UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles = $this->userRoles;
 
-        return array_unique($roles);
-    }
+        $userRoles = [];
 
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
+        foreach ($roles as $role) {
+            $userRoles[] = $role->getName();
+        }
 
-        return $this;
+        return $userRoles;
     }
 
     /**
@@ -166,28 +180,78 @@ class User implements UserInterface
      */
     public function getReceivedMessages(): Collection
     {
-        return $this->receivedMessages;
+        return $this->ReceivedMessages;
     }
 
-    public function addReceivedMessage(Message $receivedMessage): self
+    public function addReceivedMessage(Message $ReceivedMessage): self
     {
-        if (!$this->receivedMessages->contains($receivedMessage)) {
-            $this->receivedMessages[] = $receivedMessage;
-            $receivedMessage->setRecipient($this);
+        if (!$this->ReceivedMessages->contains($ReceivedMessage)) {
+            $this->ReceivedMessages[] = $ReceivedMessage;
+            $ReceivedMessage->setRecipient($this);
         }
 
         return $this;
     }
 
-    public function removeReceivedMessage(Message $receivedMessage): self
+    public function removeReceivedMessage(Message $ReceivedMessage): self
     {
-        if ($this->receivedMessages->contains($receivedMessage)) {
-            $this->receivedMessages->removeElement($receivedMessage);
+        if ($this->ReceivedMessages->contains($ReceivedMessage)) {
+            $this->ReceivedMessages->removeElement($ReceivedMessage);
             // set the owning side to null (unless already changed)
-            if ($receivedMessage->getRecipient() === $this) {
-                $receivedMessage->setRecipient(null);
+            if ($ReceivedMessage->getRecipient() === $this) {
+                $ReceivedMessage->setRecipient(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Role[]
+     */
+    public function getUserRoles(): Collection
+    {
+        return $this->userRoles;
+    }
+
+    public function addUserRole(Role $userRole): self
+    {
+        if (!$this->userRoles->contains($userRole)) {
+            $this->userRoles[] = $userRole;
+        }
+
+        return $this;
+    }
+
+    public function removeUserRole(Role $userRole): self
+    {
+        if ($this->userRoles->contains($userRole)) {
+            $this->userRoles->removeElement($userRole);
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

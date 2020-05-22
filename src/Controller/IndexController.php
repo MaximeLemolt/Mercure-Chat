@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class IndexController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
+     * @Route("/chat", name="chat")
      */
     public function __invoke(CookieGenerator $cookieGenerator): Response
     {
