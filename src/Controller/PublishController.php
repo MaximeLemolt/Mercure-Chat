@@ -14,13 +14,13 @@ class PublishController extends AbstractController
     /**
      * @Route("/hub/message", name="sendMessage", methods={"POST"})
      */
-    public function __invoke(MessageBusInterface $bus, Request $request): RedirectResponse
+    public function chat(MessageBusInterface $bus, Request $request): RedirectResponse
     {
         $update = new Update('http://localhost:8000/message', json_encode([
             'message' => $request->request->get('message'),
         ]));
         $bus->dispatch($update);
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('chat');
     }
 }

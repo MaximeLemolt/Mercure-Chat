@@ -49,6 +49,12 @@ class Message
      */
     private $recipient;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->status = 1;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

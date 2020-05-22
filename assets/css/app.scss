@@ -17,4 +17,29 @@
             height: 50px;
         }
     }
+
+    #messages {
+        margin-bottom: 70px;
+        padding: 10px;
+
+        .message {
+            margin: 5px 0;
+            color: #FFF;
+            padding: 1em;
+            display: inline;
+            border-radius: 20px;
+        }
+    
+        .message--sended {
+            @extend .message;
+            background: rgb(59, 171, 223);
+            align-self: flex-end;
+        }
+    
+        .message--received {
+            @extend .message;
+            background: rgb(68, 233, 81);
+            align-self: flex-start;
+        }
+    }
 }
