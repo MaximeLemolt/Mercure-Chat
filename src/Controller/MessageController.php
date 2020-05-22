@@ -26,7 +26,8 @@ class MessageController extends AbstractController
 
         return $this->render('index/chat.html.twig', [
             'messages' => $messages,
-            'users' => $users
+            'users' => $users,
+            'recipient' => $recipient
         ]);
     }
 }

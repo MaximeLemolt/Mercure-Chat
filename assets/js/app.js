@@ -19,19 +19,24 @@ let chat = {
     init: function() {
         const _receiver = document.getElementById('messages');
         const _messageInput = document.getElementById('message-input');
+        const _conversation = document.getElementById('conversation');
         const _sendForm = document.getElementById('chat-form');
 
         // Fonction d'envoie du message
-        const sendMessage = (message) => {
+        const sendMessage = (message, recipient) => {
             if (message === '') {
                 return;
             }
 
             fetch(_sendForm.action, {
                 method: _sendForm.method,
-                body: 'message=' + message,
+                body: JSON.stringify({
+                    content: message,
+                    recipient: recipient
+                }),
                 headers: new Headers({
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 })
             }).then(() => {
                 _messageInput.value = '';
@@ -40,7 +45,7 @@ let chat = {
 
         // Evenement sur le form
         _sendForm.onsubmit = (evt) => {
-            sendMessage(_messageInput.value);
+            sendMessage(_messageInput.value, _conversation.dataset.recipient);
 
             evt.preventDefault();
             return false;
@@ -53,11 +58,20 @@ let chat = {
         const eventSource = new EventSource(url, { withCredentials: true });
         eventSource.onmessage = (evt) => {
             const data = JSON.parse(evt.data);
-            console.log(data);
+
             if (!data.message) {
                 return;
             }
-            _receiver.insertAdjacentHTML('beforeend', `<div class="message--sended">${data.message}</div>`);
+
+            if (document.getElementById('no-messages') != null) {
+                document.getElementById('no-messages').remove();
+            }
+
+            if (data.author == _conversation.dataset.recipient) {
+                _receiver.insertAdjacentHTML('beforeend', `<div class="message--received">${data.message}</div>`);
+            } else {
+                _receiver.insertAdjacentHTML('beforeend', `<div class="message--sended">${data.message}</div>`);
+            }
             };
         }
 };
