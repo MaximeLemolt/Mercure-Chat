@@ -13,6 +13,7 @@ import '../css/app.scss';
 
 let chat = {
 
+    ApiBaseUrl: 'http://localhost:8000',
     mercurePublishUrl: 'http://localhost:3000/.well-known/mercure',
 
     init: function() {
@@ -47,7 +48,7 @@ let chat = {
 
         // Abonnement Mercure
         const url = new URL(chat.mercurePublishUrl);
-        url.searchParams.append('topic', 'http://localhost:8000/message');
+        url.searchParams.append('topic', chat.ApiBaseUrl + '/message');
 
         const eventSource = new EventSource(url, { withCredentials: true });
         eventSource.onmessage = (evt) => {

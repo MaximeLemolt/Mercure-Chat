@@ -8,8 +8,23 @@
     <div class="row d-flex justify-content-center mt-5">
         <div id="conversation" class="col-6 p-0">
             <div id="messages" class="d-flex flex-column">
-                <div class="message--received">Salut</div>
-                <div class="message--sended">Salut !</div>
+                {% if messages is defined %}
+                    {% for message in messages %}
+                        {% if message.author == app.user %}
+                            <div class="message--sended">
+                                <p class="message-content m-0">{{ message.content }}</p>
+                                <p class="message-date m-0">{{ message.createdAt|date('H:i:s') }}</p>
+                            </div>
+                        {% else %}
+                            <div class="message--received">
+                                <p class="message-content m-0">{{ message.content }}</p>
+                                <p class="message-date m-0">{{ message.createdAt|date('H:i:s') }}</p>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        Aucun messages.
+                    {% endfor %}
+                {% endif %}
             </div>
             <form id="chat-form" action="{{ path('sendMessage') }}" method="POST" class="form-inline">
                 <div class="form-group col-10 p-0">
@@ -20,10 +35,9 @@
         </div>
 
         <div id="users-list" class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">Utilisateur 1</a>
-            <a href="#" class="list-group-item list-group-item-action active">Utilisateur 2</a>
-            <a href="#" class="list-group-item list-group-item-action">Utilisateur 3</a>
-            <a href="#" class="list-group-item list-group-item-action">Utilisateur 4</a>
+            {% for user in users %}
+                <a href="{{ path('conversation', {author: app.user.id, recipient: user.id}) }}" class="list-group-item list-group-item-action">{{ user.username }}</a>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

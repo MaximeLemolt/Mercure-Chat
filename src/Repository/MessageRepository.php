@@ -47,4 +47,18 @@ class MessageRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getMessagesBetweenTwoUsers($author, $recipient)
+    {
+        return $this->createQueryBuilder('m')
+                    ->join('m.author', 'a')
+                    ->join('m.recipient', 'r')
+                    ->addSelect('m, a, r')
+                    ->andWhere('(m.author = :author OR m.author = :recipient) AND (m.recipient = :author OR m.recipient = :recipient)')
+                    ->setParameter('author', $author)
+                    ->setParameter('recipient', $recipient)
+                    ->orderBy('m.createdAt', 'ASC')
+                    ->getQuery()
+                    ->getResult();
+    }
 }
