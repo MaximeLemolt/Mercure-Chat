@@ -6,9 +6,9 @@
 
 {% block body %}
     <div class="row d-flex justify-content-center mt-5">
-        <div id="conversation" class="col-6 p-0" data-recipient="{{ recipient.id }}">
-            <div id="messages" class="d-flex flex-column">
+        <div id="conversation" class="col-6 p-0">
                 {% if messages is defined %}
+                <div id="messages" class="d-flex flex-column" data-recipient="{{ recipient.id }}">
                     {% for message in messages %}
                         {% if message.author == app.user %}
                             <div class="message--sended">
@@ -24,8 +24,8 @@
                     {% else %}
                         <p id="no-messages" class="m-0">Aucun messages.</p>
                     {% endfor %}
+                </div>
                 {% endif %}
-            </div>
             <form id="chat-form" action="{{ path('sendMessage') }}" method="POST" class="form-inline">
                 <div class="form-group col-10 p-0">
                     <textarea class="form-control" id="message-input" placeholder="Votre message" name="message"></textarea>

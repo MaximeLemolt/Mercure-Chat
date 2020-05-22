@@ -19,7 +19,7 @@ let chat = {
     init: function() {
         const _receiver = document.getElementById('messages');
         const _messageInput = document.getElementById('message-input');
-        const _conversation = document.getElementById('conversation');
+        const _conversation = document.getElementById('messages');
         const _sendForm = document.getElementById('chat-form');
 
         // Fonction d'envoie du message

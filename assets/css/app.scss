@@ -2,6 +2,10 @@
     position: relative;
     border: solid 1px #ccc;
     border-radius: 10px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
     textarea {
         width: 100%;
@@ -22,6 +26,7 @@
 #messages {
     margin-bottom: 70px;
     padding: 10px;
+    overflow: auto;
 
     .message {
         margin: 5px 0;
