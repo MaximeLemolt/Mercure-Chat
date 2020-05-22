@@ -13,12 +13,12 @@
                         {% if message.author == app.user %}
                             <div class="message--sended">
                                 <p class="message-content m-0">{{ message.content }}</p>
-                                <p class="message-date m-0">{{ message.createdAt|date('H:i:s') }}</p>
+                                <p class="message-date m-0">{{ message.createdAt|date('d-m-y | H:i') }}</p>
                             </div>
                         {% else %}
                             <div class="message--received">
                                 <p class="message-content m-0">{{ message.content }}</p>
-                                <p class="message-date m-0">{{ message.createdAt|date('H:i:s') }}</p>
+                                <p class="message-date m-0">{{ message.createdAt|date('d-m-y | H:i') }}</p>
                             </div>
                         {% endif %}
                     {% else %}

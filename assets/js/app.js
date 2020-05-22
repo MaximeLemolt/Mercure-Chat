@@ -58,20 +58,30 @@ let chat = {
         const eventSource = new EventSource(url, { withCredentials: true });
         eventSource.onmessage = (evt) => {
             const data = JSON.parse(evt.data);
+            
+                if (!data.message) {
+                    return;
+                }
 
-            if (!data.message) {
-                return;
-            }
+                if (document.getElementById('no-messages') != null) {
+                    document.getElementById('no-messages').remove();
+                }
 
-            if (document.getElementById('no-messages') != null) {
-                document.getElementById('no-messages').remove();
-            }
-
-            if (data.author == _conversation.dataset.recipient) {
-                _receiver.insertAdjacentHTML('beforeend', `<div class="message--received">${data.message}</div>`);
-            } else {
-                _receiver.insertAdjacentHTML('beforeend', `<div class="message--sended">${data.message}</div>`);
-            }
+                if (data.message.author == _conversation.dataset.recipient) {
+                    _receiver.insertAdjacentHTML('beforeend',
+                    `<div class="message--received">
+                        <p class="message-content m-0">${data.message.content}</p>
+                        <p class="message-date m-0">${data.message.date}</p>
+                    </div>`
+                    );
+                } else {
+                    _receiver.insertAdjacentHTML('beforeend',
+                    `<div class="message--sended">
+                        <p class="message-content m-0">${data.message.content}</p>
+                        <p class="message-date m-0">${data.message.date}</p>
+                    </div>`
+                    );
+                }
             };
         }
 };

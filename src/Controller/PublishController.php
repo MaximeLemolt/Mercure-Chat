@@ -26,8 +26,11 @@ class PublishController extends AbstractController
         $em->flush();
 
         $update = new Update('http://localhost:8000/message', json_encode([
-            'message' => $message->getContent(),
-            'author' => $message->getAuthor()->getId()
+            'message' => [
+                'content' => $message->getContent(),
+                'author' => $message->getAuthor()->getId(),
+                'date' => $message->getCreatedAt()->format('d-m-y | H:i')
+            ],
         ]));
         $bus->dispatch($update);
 
