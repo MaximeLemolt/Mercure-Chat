@@ -82,6 +82,8 @@ let chat = {
                     </div>`
                     );
                 }
+
+                _conversation.scrollTop = _conversation.scrollHeight;
             };
         }
 };
