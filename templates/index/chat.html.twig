@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+{{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div id="conversation" class="col-8 p-0">
+            <div id="messages">Aucun messages</div>
+            <form id="chat-form" action="" method="POST" class="form-inline">
+                <div class="form-group col-10 p-0">
+                    <textarea class="form-control" id="message-input" placeholder="Votre message" name="message"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary col-2">Envoyer</button>
+            </form>
+        </div>
+
+        <div id="users-list" class="list-group" class="col-4">
+            <a href="#" class="list-group-item list-group-item-action">Utilisateur 1</a>
+            <a href="#" class="list-group-item list-group-item-action active">Utilisateur 2</a>
+            <a href="#" class="list-group-item list-group-item-action">Utilisateur 3</a>
+            <a href="#" class="list-group-item list-group-item-action">Utilisateur 4</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ encore_entry_script_tags('app') }}
+{% endblock %}

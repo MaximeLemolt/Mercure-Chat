@@ -3,7 +3,7 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-<div class="row">
+<div class="row h-100 d-flex justify-content-center align-items-center">
     <form method="post" class="text-center">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

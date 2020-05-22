@@ -12,9 +12,9 @@ class IndexController extends AbstractController
     /**
      * @Route("/chat", name="chat")
      */
-    public function __invoke(CookieGenerator $cookieGenerator): Response
+    public function chat(CookieGenerator $cookieGenerator): Response
     {
-        $response = $this->render('index/index.html.twig', []);
+        $response = $this->render('index/chat.html.twig', []);
         $response->headers->setCookie($cookieGenerator->generate());
 
         return $response;
