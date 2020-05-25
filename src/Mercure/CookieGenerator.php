@@ -16,10 +16,10 @@ class CookieGenerator
         $this->secret = $secret;
     }
 
-    public function generate(): Cookie
+    public function generate(array $targets = ['*']): Cookie
     {
         $token = (new Builder())
-            ->withClaim('mercure', ['subscribe' => ['*']])
+            ->withClaim('mercure', ['subscribe' => $targets])
             ->getToken(new Sha256(), new Key($this->secret));
 
         return Cookie::create('mercureAuthorization', $token, 0, '/.well-known/mercure');

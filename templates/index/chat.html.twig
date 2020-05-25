@@ -6,7 +6,8 @@
 
 {% block body %}
     <div class="row d-flex justify-content-center mt-5">
-        <div id="conversation" class="col-6 p-0">
+        {% if recipient is defined %}
+        <div id="conversation" class="col-6 p-0" data-user="{{ app.user.id }}">
                 {% if messages is defined %}
                 <div id="messages" class="d-flex flex-column" data-recipient="{{ recipient.id }}">
                     {% for message in messages %}
@@ -33,10 +34,12 @@
                 <button type="submit" class="btn btn-primary col-2">Envoyer</button>
             </form>
         </div>
+        {% endif %}
 
         <div id="users-list" class="list-group">
+            <span class="list-group-item bg-primary text-light">Utilisateurs</span>
             {% for user in users %}
-                <a href="{{ path('conversation', {author: app.user.id, recipient: user.id}) }}" class="list-group-item list-group-item-action">{{ user.username }}</a>
+                <a href="{{ path('conversation', {author: app.user.id, recipient: user.id}) }}" class="list-group-item list-group-item-action" data-user-id="{{ user.id }}">{{ user.username }}</a>
             {% endfor %}
         </div>
     </div>

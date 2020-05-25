@@ -20,7 +20,11 @@ class IndexController extends AbstractController
         $response = $this->render('index/chat.html.twig', [
             'users' => $users
         ]);
-        $response->headers->setCookie($cookieGenerator->generate());
+        $response->headers->setCookie($cookieGenerator->generate(
+            [
+                "http://localhost:8000/users/{$this->getUser()->getId()}"
+            ]
+        ));
 
         return $response;
     }
