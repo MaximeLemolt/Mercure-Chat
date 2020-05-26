@@ -22,6 +22,7 @@ class MessageController extends AbstractController
         }
 
         $users = $userRepository->findAll();
+
         $messages = $messageRepository->getMessagesBetweenTwoUsers($author, $recipient);
 
         return $this->render('index/chat.html.twig', [

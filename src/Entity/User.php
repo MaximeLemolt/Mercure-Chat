@@ -56,6 +56,11 @@ class User implements UserInterface
      */
     private $updatedAt;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastActivityAt;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
@@ -63,6 +68,8 @@ class User implements UserInterface
         $this->status = 1;
         $this->sendedMessage = new ArrayCollection();
         $this->receivedMessage = new ArrayCollection();
+        $this->sendedMessages = new ArrayCollection();
+        $this->receivedMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -254,5 +261,28 @@ class User implements UserInterface
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public function getLastActivityAt(): ?\DateTimeInterface
+    {
+        return $this->lastActivityAt;
+    }
+
+    public function setLastActivityAt(\DateTimeInterface $lastActivityAt): self
+    {
+        $this->lastActivityAt = $lastActivityAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Bool Whether the user is active or not
+     */
+    public function isActiveNow()
+    {
+        // Delay during wich the user will be considered as still active
+        $delay = new \DateTime('5 minutes ago');
+
+        return ( $this->getLastActivityAt() > $delay );
     }
 }

@@ -39,3 +39,7 @@ services:
         autoconfigure: true
         tags:
         - { name: serializer.normalizer }
+
+    App\EventListener\ActivityListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }

@@ -40,7 +40,11 @@
             <span class="list-group-item bg-primary text-light">Utilisateurs</span>
             {% for user in users %}
                 {% if user != app.user %}
-                    <a href="{{ path('conversation', {author: app.user.id, recipient: user.id}) }}" class="list-group-item list-group-item-action" data-user-id="{{ user.id }}">{{ user.username }}</a>
+                    {% if user.isActiveNow() == true %}
+                        <a href="{{ path('conversation', {author: app.user.id, recipient: user.id}) }}" class="list-group-item list-group-item-action" data-user-id="{{ user.id }}">{{ user.username }}</a>
+                    {% else %}
+                        <a href="{{ path('conversation', {author: app.user.id, recipient: user.id}) }}" class="list-group-item list-group-item-action text-muted" data-user-id="{{ user.id }}">{{ user.username }}</a>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
         </div>
