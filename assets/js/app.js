@@ -93,6 +93,7 @@ let chat = {
                     // Scroll position bottom if messages out of the box
                     _conversation.scrollTop = _conversation.scrollHeight;
                 } else {
+                    // Add notification
                     const usersList = document.getElementById('users-list').getElementsByTagName('a');
                     console.log(usersList);
 
